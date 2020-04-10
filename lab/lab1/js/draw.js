@@ -136,6 +136,15 @@ map.on('draw:created', function (e) {
     myRectangles.push({"Layer":myRectangle,"ID":id,"Shape":type}); //Push into the array
 
     console.log(myRectangles); // Check results
+    console.log(e.target);
+    // Task 6: Connect with sidebar
+
+    var layer=e.layer;
+    layer.bindPopup(`${id}`);
+
+$(`div.shape[data-leaflet-id|=${id}]`).on('click',function(e){
+  layer.openPopup();
+});
 
  // Task 7 (Stretch Goal): Reverse Task 6
    myRectangle.on('mouseover',function(e){
