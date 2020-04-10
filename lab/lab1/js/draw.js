@@ -90,6 +90,7 @@ Moving your mouse outside of the circle should remove the highlighting.
 
 // Global Variables
 var myRectangle;
+var myRectangles=[]; //For task 5, create an empty array
 
 // Initialize Leaflet Draw
 var drawControl = new L.Control.Draw({
@@ -98,16 +99,55 @@ var drawControl = new L.Control.Draw({
     polygon: false,
     circle: false,
     marker: false,
-    circlemarker: false,
+    circlemarker: true,
     rectangle: true
   }
 });
 
 map.addControl(drawControl);
 
+
 // Event which is run every time Leaflet draw creates a new layer
 map.on('draw:created', function (e) {
     var type = e.layerType; // The type of shape
-    var layer = e.layer; // The Leaflet layer for the shape
-    var id = L.stamp(layer); // The unique Leaflet ID for the layer
+    myRectangle = e.layer; // The Leaflet layer for the shape
+    var id = L.stamp(myRectangle); // The unique Leaflet ID for the layer
+
+// Task 2. Add layer
+    //map.addLayer(myRectangle);
+
+// Task 3. Only 1 rectangle
+//if (myRectangle){
+  //map.removeLayer(myRectangle);} //Remove the old one
+  //myRectangle=layer;
+  //map.addLayer(myRectangle);
+
+// Task 4. Add shape to sidebar
+  //var jhtml=$.parseHTML(`<div class="shape" data-leaflet-id=${id}><h1>Current ID:${id}</h1></div>`);
+  //$('#shapes').append(jhtml);
+
+  // Task 5. Store multiple shapes
+  if (myRectangle){
+    var jhtml=$.parseHTML(`<div class="shape" data-leaflet-id=${id}><h1>Current ID:${id}</h1></div>`);
+    $('#shapes').append(jhtml);
+
+    map.addLayer(myRectangle); //Add layer: individual rectangle
+
+    myRectangles.push({"Layer":myRectangle,"ID":id,"Shape":type}); //Push into the array
+
+    console.log(myRectangles); // Check results
+
+ // Task 7 (Stretch Goal): Reverse Task 6
+   myRectangle.on('mouseover',function(e){
+     $(`div.shape[data-leaflet-id=${e.target._leaflet_id}]`).css('background-color','#efedf5')
+  });
+
+  myRectangle.on('mouseout',function(e){
+    $(`div.shape[data-leaflet-id=${e.target._leaflet_id}]`).css('background-color','white')
+
+    console.log(e.target._leaflet_id);
+});
+
+}
+
 });
