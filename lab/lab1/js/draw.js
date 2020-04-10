@@ -137,14 +137,27 @@ map.on('draw:created', function (e) {
 
     console.log(myRectangles); // Check results
     console.log(e.target);
+
     // Task 6: Connect with sidebar
+// 1. Popup effect
 
-    var layer=e.layer;
-    layer.bindPopup(`${id}`);
+//var layer=e.layer;
+//layer.bindPopup(`${id}`);
+//$(`div.shape[data-leaflet-id|=${id}]`).on('click',function(e){
+  //layer.openPopup();
+//});
 
-$(`div.shape[data-leaflet-id|=${id}]`).on('click',function(e){
-  layer.openPopup();
-});
+// 2. Remove
+$(`div.shape[data-leaflet-id|=${id}]`).click(function(e) {
+         _.map(myRectangles, function(each){
+            if(each.ID==`${id}`){
+               // Remove the rectangle
+               map.removeLayer(each.Layer); //Layer is a property in myRectangles array
+               // Remove the text on sidebar
+               $(`div.shape[data-leaflet-id=${each.ID}]`).remove(); 
+            }
+        });
+      });
 
  // Task 7 (Stretch Goal): Reverse Task 6
    myRectangle.on('mouseover',function(e){
